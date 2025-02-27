@@ -1,0 +1,7 @@
+# requirements.txt
+django==3.2.9
+djangorestframework==3.12.4
+djangorestframework-simplejwt==4.8.0
+django-cors-headers==3.10.0
+pynamodb==5.2.1
+boto3==1.18.63
