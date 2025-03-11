@@ -1,8 +1,14 @@
-# requirements.txt
-django==3.2.9
-djangorestframework==3.12.4
-djangorestframework-simplejwt==4.8.0
-django-cors-headers==3.10.0
-pynamodb==5.2.1
-boto3==1.18.63
-result-portal-lib==0.1.6
+# Production Dependencies (required for app/Lambda runtime)
+django>=3.2,<4.0            # Latest 3.2.x LTS
+djangorestframework>=3.14,<3.15  # Latest stable for API features
+djangorestframework-simplejwt>=5.2,<5.3  # Latest JWT with DRF 3.14
+django-cors-headers>=3.13,<3.14  # Latest for CORS support
+pynamodb>=5.3,<5.4          # Latest for DynamoDB ORM
+boto3>=1.18.63             # Minimum from your spec, latest OK
+result-portal-lib==0.1.6   # Your library, update to 0.1.7 if redeployed
+python-jose>=3.3,<3.4      # JWT signing/verification
+
+# Development Dependencies (optional, for local dev/build)
+twine>=4.0,<4.1            # For uploading result-portal-lib to PyPI
+wheel>=0.42,<0.43          # For building wheel distributions
+setuptools>=65.5,<65.6     # For setup.py packaging
