@@ -11,4 +11,4 @@ python-jose>=3.3,<3.4      # JWT signing/verification
 # Development Dependencies (optional, for local dev/build)
 twine>=4.0,<4.1            # For uploading result-portal-lib to PyPI
 wheel>=0.42,<0.43          # For building wheel distributions
-setuptools>=65.5,<65.6     # For setup.py packaging
+setuptools>=65.5,<65.6     # For setup.py packagin
