@@ -1,0 +1,14 @@
+result_portal_lib-0.1.6.dist-info/INSTALLER,sha256=zuuue4knoyJ-UwPPXg8fezS7VCrXJQrAP7zeNuwvFQg,4
+result_portal_lib-0.1.6.dist-info/METADATA,sha256=QThQgcxJdhFl2MxSxzUPlhXaeyK2-vu_qmkLVnbKq_c,746
+result_portal_lib-0.1.6.dist-info/RECORD,,
+result_portal_lib-0.1.6.dist-info/REQUESTED,sha256=47DEQpj8HBSa-_TImW-5JCeuQeRkm5NMpJWZG3hSuFU,0
+result_portal_lib-0.1.6.dist-info/WHEEL,sha256=tZoeGjtWxWRfdplE7E3d45VPlLNQnvbKiYnx7gwAy8A,92
+result_portal_lib-0.1.6.dist-info/top_level.txt,sha256=tDTAC4L3eIxVINDIXPvd7Nn93v5Gzqys_YpOilVte-U,18
+result_portal_lib/__init__.py,sha256=5Ol0KSUZ72nB3wgXPp22Vv1EF1KSCrM9L5_boUS_aDo,527
+result_portal_lib/__pycache__/__init__.cpython-39.pyc,,
+result_portal_lib/__pycache__/aws_utils.cpython-39.pyc,,
+result_portal_lib/__pycache__/complaint_manager.cpython-39.pyc,,
+result_portal_lib/__pycache__/models.cpython-39.pyc,,
+result_portal_lib/aws_utils.py,sha256=8WfyHXzIEkqTyuZNX0w3775a6u2bO6qDpRNju1D99oA,7407
+result_portal_lib/complaint_manager.py,sha256=ABePH00gRxJQDkuV4_w63PZPxpAdVb34XXu2OndnCrc,5719
+result_portal_lib/models.py,sha256=fV74beEMtJg8q-AVnbkXVSKMxXyAzF0AzLKBLELwY6g,2299
