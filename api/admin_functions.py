@@ -1,7 +1,8 @@
+# ~/environment/resultportal/api/admin_functions.py
 import csv
 from result_portal_lib.models import User
-from result_portal_lib.aws_utils import upload_to_s3, send_ses_email
-from django.conf import settings  # Add this import
+from result_portal_lib.aws_utils import upload_to_s3, subscribe_to_sns, publish_sns_message
+from django.conf import settings
 from django.contrib.auth.hashers import make_password
 import secrets
 import logging
@@ -9,7 +10,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 def upload_staff_data(file, bucket_name):
-    """Upload staff CSV data to S3 and create STAFF users in DynamoDB with SES emails."""
+    """Upload staff CSV data to S3 and create STAFF users in DynamoDB with SNS notifications."""
     try:
         if not file.name.endswith('.csv'):
             raise ValueError("File must be a CSV")
@@ -42,15 +43,23 @@ def upload_staff_data(file, bucket_name):
             for user, _ in staff_users:
                 batch.save(user)
 
+        # Use FRONTEND_URL from settings
+        FRONTEND_URL = getattr(settings, 'FRONTEND_URL', 'https://yourdomain.com')
         for user, temp_password in staff_users:
-            send_ses_email(
+            subscribe_to_sns(user.email)  # Subscribe staff to SNS topic
+            message = (
+                f"Welcome! Your staff account is created.\n"
+                f"Username: {user.username}\n"
+                f"Temporary Password: {temp_password}\n"
+                f"Change it after login at {FRONTEND_URL}/change-password"
+            )
+            publish_sns_message(
                 'Your Staff Account',
-                f'Username: {user.username}\nTemporary Password: {temp_password}\nChange it after login at /api/change_password/',
-                user.email,
-                from_email=settings.SES_SENDER  # Explicitly pass from_email
+                message,
+                user.email
             )
         
-        logger.info(f"Uploaded and emailed {len(staff_users)} staff users")
+        logger.info(f"Uploaded and notified {len(staff_users)} staff users via SNS")
     except ValueError as ve:
         logger.error(f"Validation error uploading staff data: {ve}")
         raise
@@ -59,7 +68,7 @@ def upload_staff_data(file, bucket_name):
         raise
 
 def upload_student_data(file, bucket_name):
-    """Upload student CSV data to S3 and create STUDENT users in DynamoDB with SES emails."""
+    """Upload student CSV data to S3 and create STUDENT users in DynamoDB with SNS notifications."""
     try:
         if not file.name.endswith('.csv'):
             raise ValueError("File must be a CSV")
@@ -92,15 +101,23 @@ def upload_student_data(file, bucket_name):
             for user, _ in student_users:
                 batch.save(user)
 
+        # Use FRONTEND_URL from settings
+        FRONTEND_URL = getattr(settings, 'FRONTEND_URL', 'https://yourdomain.com')
         for user, temp_password in student_users:
-            send_ses_email(
+            subscribe_to_sns(user.email)  # Subscribe student to SNS topic
+            message = (
+                f"Welcome! Your student account is created.\n"
+                f"Username: {user.username}\n"
+                f"Temporary Password: {temp_password}\n"
+                f"Change it after login at {FRONTEND_URL}/change-password"
+            )
+            publish_sns_message(
                 'Your Student Account',
-                f'Username: {user.username}\nTemporary Password: {temp_password}\nChange it after login at /api/change_password/',
-                user.email,
-                from_email=settings.SES_SENDER  # Explicitly pass from_email
+                message,
+                user.email
             )
         
-        logger.info(f"Uploaded and emailed {len(student_users)} student users")
+        logger.info(f"Uploaded and notified {len(student_users)} student users via SNS")
     except ValueError as ve:
         logger.error(f"Validation error uploading student data: {ve}")
         raise

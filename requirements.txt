@@ -1,14 +1,47 @@
-# Production Dependencies (required for app/Lambda runtime)
-django>=3.2,<4.0            # Latest 3.2.x LTS
-djangorestframework>=3.14,<3.15  # Latest stable for API features
-djangorestframework-simplejwt>=5.2,<5.3  # Latest JWT with DRF 3.14
-django-cors-headers>=3.13,<3.14  # Latest for CORS support
-pynamodb>=5.3,<5.4          # Latest for DynamoDB ORM
-boto3>=1.18.63             # Minimum from your spec, latest OK
-result-portal-lib==0.1.6   # Your library, update to 0.1.7 if redeployed
-python-jose>=3.3,<3.4      # JWT signing/verification
-
-# Development Dependencies (optional, for local dev/build)
-twine>=4.0,<4.1            # For uploading result-portal-lib to PyPI
-wheel>=0.42,<0.43          # For building wheel distributions
-setuptools>=65.5,<65.6     # For setup.py packagin
+asgiref==3.8.1
+backports.tarfile==1.2.0
+boto3==1.18.63
+botocore==1.21.65
+certifi==2025.1.31
+cffi==1.17.1
+charset-normalizer==3.4.1
+cryptography==44.0.2
+Django==3.2.9
+django-cors-headers==3.10.0
+djangorestframework==3.12.4
+djangorestframework-simplejwt==4.8.0
+docutils==0.21.2
+id==1.5.0
+idna==3.10
+importlib_metadata==8.6.1
+jaraco.classes==3.4.0
+jaraco.context==6.0.1
+jaraco.functools==4.1.0
+jeepney==0.9.0
+jmespath==0.10.0
+keyring==25.6.0
+markdown-it-py==3.0.0
+mdurl==0.1.2
+more-itertools==10.6.0
+nh3==0.2.21
+packaging==24.2
+pycparser==2.22
+Pygments==2.19.1
+PyJWT==2.9.0
+pynamodb==5.2.1
+python-dateutil==2.9.0.post0
+pytz==2025.1
+readme_renderer==44.0
+requests==2.32.3
+requests-toolbelt==1.0.0
+result-portal-lib==0.1.7
+rfc3986==2.0.0
+rich==13.9.4
+s3transfer==0.5.2
+SecretStorage==3.3.3
+six==1.17.0
+sqlparse==0.5.3
+twine==6.1.0
+typing_extensions==4.12.2
+urllib3==1.26.20
+zipp==3.21.0

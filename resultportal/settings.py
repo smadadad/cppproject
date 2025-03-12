@@ -2,67 +2,66 @@ import os
 import sys
 from pathlib import Path
 from datetime import timedelta
-from result_portal_lib.models import configure_models
 
+# Build paths
 BASE_DIR = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(BASE_DIR.parent))
 
-SECRET_KEY = 'django-insecure-your-secret-key-here'
-DEBUG = False
-ALLOWED_HOSTS = ["0536cc201ee8495b89348bd8012ba2dd.vfs.cloud9.us-east-1.amazonaws.com", "172.31.5.186", "ec2-44-199-250-137.compute-1.amazonaws.com", "localhost",]
 
+# Security settings
+SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-your-secret-key-here')  # Use env var for security
+DEBUG = os.environ.get('DEBUG', 'False') == 'True'  # Env-driven, default False
+ALLOWED_HOSTS = [
+    "0536cc201ee8495b89348bd8012ba2dd.vfs.cloud9.us-east-1.amazonaws.com",
+    "172.31.5.186",
+    "ec2-44-199-250-137.compute-1.amazonaws.com",
+    "localhost",
+    # Add API Gateway domain if known, e.g., "*.execute-api.us-east-1.amazonaws.com"
+]
+
+# Installed apps
 INSTALLED_APPS = [
-    'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
     'rest_framework',
     'rest_framework_simplejwt',
     'corsheaders',
     'api.apps.ApiConfig',
 ]
 
+
+
+# Middleware
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    
 ]
 
+# URL and WSGI config
 ROOT_URLCONF = 'resultportal.urls'
 WSGI_APPLICATION = 'resultportal.wsgi.application'
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': '/home/ec2-user/environment/resultportal/db.sqlite3',
-    }
-    
-}
+# No DATABASES - using DynamoDB only
 
-AUTH_PASSWORD_VALIDATORS = [
-    {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
-    {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'},
-    {'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator'},
-    {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
-]
 
+# Authentication
+AUTHENTICATION_BACKENDS = ['api.auth.DynamoDBAuthBackend'] 
+
+FRONTEND_URL = 'https://yourdomain.com'  # Replace with your actual Next.js URL
+
+# Internationalization
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'UTC'
 USE_I18N = True
-USE_TZ = True 
+USE_TZ = True
 
-AUTHENTICATION_BACKENDS = ['result_portal_lib.auth.DynamoDBAuthBackend']
 
+# Static files
 STATIC_URL = '/static/'
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+# Templates (minimal, since no Django templates used)
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -72,43 +71,49 @@ TEMPLATES = [
             'context_processors': [
                 'django.template.context_processors.debug',
                 'django.template.context_processors.request',
-                'django.contrib.auth.context_processors.auth',
-                'django.contrib.messages.context_processors.messages',
             ],
         },
     },
 ]
 
+
+
+# REST Framework with JWT
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     )
 }
 
+
+
+# Simple JWT settings
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
-    'USER_ID_FIELD': 'username',  # Match your hash_key
+    'USER_ID_FIELD': 'username',  # Matches PynamoDB User hash_key
     'USER_ID_CLAIM': 'user_id',
 }
 
-CORS_ALLOW_ALL_ORIGINS = True
 
 
-# AWS CREDENTIALS
-AWS_REGION = 'us-east-1'
-configure_models(AWS_REGION)
+# CORS for frontend
+CORS_ALLOW_ALL_ORIGINS = True  # Tighten this in prod (e.g., CORS_ALLOWED_ORIGINS)
+
+
+
+# AWS Configuration
+AWS_REGION = os.environ.get('AWS_REGION', 'us-east-1')
 S3_BUCKET_NAME = 'result-portal-bucket'
-SNS_TOPIC_NAME = 'teachernotifications'
+SNS_TOPIC_NAME = 'arn:aws:sns:us-east-1:your-account-id:ResultPortalEmails'  # Replace with actual ARN
 DYNAMODB_TABLES = {
     'Users': {'read_capacity': 5, 'write_capacity': 5},
     'Results': {'read_capacity': 5, 'write_capacity': 5},
     'Complaints': {'read_capacity': 5, 'write_capacity': 5}
 }
-PROGRAMMATIC_AWS_SETUP = True  # Set to False if credentials fail
+PROGRAMMATIC_AWS_SETUP = True  # Set to False if manual setup preferred
 
-SES_SENDER = 'animashaunadams@gmail.com'
-
+# Logging
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
